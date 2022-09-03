@@ -1,0 +1,67 @@
+---
+import MainHead from '../../../components/MainHead.astro';
+import Footer from '../../../components/Footer/index.jsx';
+import Nav from '../../../components/Nav/index.jsx';
+---
+
+<html lang="en">
+<head>
+  <MainHead title="About | Jeanine White" description="About Jeanine White Lorem Ipsum"/>
+  <style lang="scss">
+    #canvas {
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: -10;
+      background: linear-gradient(#25364f, #4d71a5, #9bc4ff);
+    }
+  </style>
+</head>
+<body>
+<Nav/>
+<div class="overflow-y-auto overflow-x-hidden">
+  <canvas id="canvas"/>
+</div>
+
+<script>
+  const canvasEl = document.querySelector('#canvas')
+  const ctx = canvasEl.getContext('2d')
+  canvasEl.width = window.innerWidth
+  canvasEl.height = window.innerHeight
+  const mouse = {
+    x: null,
+    y: null
+  }
+
+  window.addEventListener(`mousemove`, mouseEvent => {
+    mouse.x = mouseEvent.x
+    mouse.y = mouseEvent.y
+  })
+
+  setInterval(() => {
+    mouse.x = null
+    mouse.y = null
+  }, 300)
+
+  function init() {
+
+  }
+
+  function animate() {
+    // animation code here
+
+    requestAnimationFrame(animate)
+  }
+
+  init()
+  animate()
+
+  window.addEventListener('resize', () => {
+    canvasEl.width = window.innerWidth
+    canvasEl.height = window.innerHeight
+  })
+</script>
+</body>
+</html>

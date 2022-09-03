@@ -1,0 +1,167 @@
+---
+import MainHead from '../../../components/MainHead.astro';
+import Footer from '../../../components/Footer/index.jsx';
+import Nav from '../../../components/Nav/index.jsx';
+---
+
+<html lang="en">
+<head>
+  <MainHead title="About | Jeanine White" description="About Jeanine White Lorem Ipsum"/>
+  <style lang="scss">
+    body {
+      background: black;
+    }
+
+    #canvas {
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: -10;
+    }
+  </style>
+</head>
+<body>
+<Nav/>
+<div class="overflow-y-auto overflow-x-hidden">
+  <canvas id="canvas"/>
+</div>
+
+<svg>
+  <defs>
+    <filter id="goo">
+      <feGaussianBlur in="SourceGeographic" stdDeviation="10" result="blur"/>
+      <feColorMatrix in="blur" mode="matrix"
+                     values="1 0 0 0 0
+                             0 1 0 0 0
+                             0 0 1 0 0
+                             0 0 0 19 -9" result="goo"/>
+      <feComposite in2="goo" operator="atop" in="SourceGeographic"/>
+    </filter>
+  </defs>
+</svg>
+
+<script>
+  const canvasEl = document.querySelector('#canvas')
+  const ctx = canvasEl.getContext('2d')
+  canvasEl.width = window.innerWidth
+  canvasEl.height = window.innerHeight
+  const numberOfParticles = 200
+
+  const particleArray = []
+
+  const mouse = {
+    x: null,
+    y: null
+  }
+
+  window.addEventListener(`mousemove`, mouseEvent => {
+    mouse.x = mouseEvent.x
+    mouse.y = mouseEvent.y
+  })
+
+  setInterval(() => {
+    mouse.x = undefined
+    mouse.y = undefined
+  }, 200)
+
+  class Particle {
+    constructor({x, y, size, color, weight}) {
+      this.x = x
+      this.y = y
+      this.originalSize = size
+      this.size = size
+      this.color = color
+      this.weight = weight
+    }
+
+    draw(context) {
+      context.beginPath()
+      context.arc(this.x, this.y, this.size, 0, Math.PI * 2, false)
+      context.fillStyle = this.color
+      context.fill()
+    }
+
+    update() {
+      this.size -= 0.1
+      if (this.size < (this.originalSize / 3)) {
+        this.x = (mouse.x + ((Math.random() * 20) - 10))
+        this.y = (mouse.y + ((Math.random() * 20) - 10))
+        this.size = (Math.random() * 12) + 10
+        this.weight = (Math.random() * 2) - 0.5
+      }
+      this.y += this.weight
+      this.weight += 0.2
+
+      if (this.y > canvasEl.height - this.size) {
+        this.weight *= -0.2
+      }
+    }
+  }
+
+  function init() {
+    particleArray.splice(0, particleArray.length)
+    for (let i = 0; i < numberOfParticles; i++) {
+      let x = Math.random() * canvasEl.width
+      let y = Math.random() * canvasEl.height
+      let size = (Math.random() * 12) + 10
+      let color = `#22d3ee`
+      let weight = 1
+      particleArray.push(new Particle({
+        x,
+        y,
+        color,
+        size,
+        weight
+      }))
+    }
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvasEl.width, canvasEl.height)
+    // ctx.fillStyle = 'rgba(0,0,0,.08)'
+    // ctx.fillRect(0,0, canvasEl.width, canvasEl.height)
+    particleArray.forEach(particle => {
+      particle.update()
+      // particle.draw(ctx);
+    })
+
+    connect()
+
+    requestAnimationFrame(animate)
+  }
+
+  init()
+
+  animate()
+
+  function connect() {
+    let opacityValue = 1
+    for (let a = 0; a < particleArray.length; a++) {
+      let particle = particleArray[a]
+
+      for (let b = a; b < particleArray.length; b++) {
+        let otherParticle = particleArray[b]
+        let distance = ((particle.x - otherParticle.x) * (particle.x - otherParticle.x)) +
+          ((particle.y - otherParticle.y) * (particle.y - otherParticle.y))
+        if (distance < 1800) {
+          opacityValue = 1 - (distance / 10000)
+          ctx.strokeStyle = `rgba(255,255,255, ${opacityValue})`
+          ctx.beginPath()
+          ctx.lineWidth = 1
+          ctx.moveTo(particle.x, otherParticle.x)
+          ctx.lineTo(otherParticle.x, otherParticle.y)
+          ctx.stroke()
+        }
+      }
+    }
+  }
+
+  window.addEventListener('resize', () => {
+    canvasEl.width = window.innerWidth
+    canvasEl.height = window.innerHeight
+  })
+</script>
+</body>
+</html>

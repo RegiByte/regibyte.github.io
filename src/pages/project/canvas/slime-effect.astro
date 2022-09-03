@@ -1,0 +1,126 @@
+---
+import MainHead from '../../../components/MainHead.astro';
+import Footer from '../../../components/Footer/index.jsx';
+import Nav from '../../../components/Nav/index.jsx';
+---
+
+<html lang="en">
+<head>
+    <MainHead title="About | Jeanine White" description="About Jeanine White Lorem Ipsum"/>
+    <style lang="scss">
+      #slime-canvas {
+        display: block;
+        height: 600px;
+        width: 100%;
+        background: black;
+        filter: blur(10px) contrast(40);
+      }
+    </style>
+</head>
+<body>
+<Nav/>
+<div class="overflow-y-auto overflow-x-hidden">
+    <canvas id="slime-canvas"/>
+</div>
+<Footer/>
+
+<script>
+  const canvasEl = document.querySelector('#slime-canvas')
+  const ctx = canvasEl.getContext('2d')
+  canvasEl.width = window.innerWidth
+  canvasEl.height = window.innerHeight
+  ctx.fillStyle = `white`
+
+  const getColor = () => ['#67e8f9', '#2dd4bf', '#60a5fa', '#818cf8', '#a78bfa'][Math.floor(Math.random() * 5)]
+
+  class Ball {
+    constructor({effect}) {
+      this.effect = effect
+      this.x = this.effect.width * 0.5
+      this.y = this.effect.height * 0.5
+      this.radius = Math.random() * 50 + 5
+      this.speedX = Math.random() * 5 - 0.5
+      this.speedY = Math.random() * 5 - 0.5
+      this.color = getColor()
+    }
+
+    update() {
+      if (this.x < this.radius || this.x > this.effect.width - this.radius) {
+        this.speedX *= -1
+      }
+      if(this.y < this.radius || this.y > this.effect.height - this.radius) {
+        this.speedY *= -1
+      }
+      this.x += this.speedX
+      this.y += this.speedY
+    }
+
+    draw(context) {
+      ctx.fillStyle = this.color
+      context.beginPath()
+      context.arc(this.x, this.y, this.radius, 0, Math.PI * 2)
+      context.fill()
+    }
+
+    reset() {
+      this.x = this.effect.width * 0.5
+      this.y = this.effect.height * 0.5
+    }
+  }
+
+  class MetaballsEffect {
+    constructor({width, height}) {
+      this.width = width
+      this.height = height
+      this.metaballs = []
+    }
+
+    init(numberOfBalls) {
+      for (let i = 0; i < numberOfBalls; i++) {
+        this.metaballs.push(new Ball({
+          effect: this
+        }))
+      }
+
+    }
+
+    update() {
+      this.metaballs.forEach(ball => ball.update())
+    }
+
+    draw(context) {
+      this.metaballs.forEach(ball => ball.draw(context))
+    }
+
+    reset(newWidth, newHeight) {
+      this.width = newWidth
+      this.height = newHeight
+      this.metaballs.forEach(ball => ball.reset())
+    }
+  }
+
+  const effect = new MetaballsEffect({
+    width: canvasEl.width,
+    height: canvasEl.height,
+  })
+  effect.init(100)
+
+  function animate() {
+    ctx.clearRect(0, 0, canvasEl.width, canvasEl.height)
+    effect.update()
+    effect.draw(ctx)
+
+    requestAnimationFrame(animate)
+  }
+
+  animate()
+
+  window.addEventListener('resize', () => {
+    canvasEl.width = window.innerWidth
+    canvasEl.height = window.innerHeight
+    ctx.fillStyle = 'white'
+    effect.reset(canvasEl.width, canvasEl.height)
+  })
+</script>
+</body>
+</html>
