@@ -1,0 +1,183 @@
+---
+
+---
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Image to Text</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: black;
+    }
+
+    .container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    #canvas1 {
+      border: 5px solid white;
+    }
+
+    .controls {
+      display: flex;
+    }
+
+    .controls > input {
+      border: 2px solid white;
+      width: 75%;
+    }
+
+    .controls > label {
+      width: 25%;
+      color: white;
+      font-size: 15px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <canvas id="canvas1"></canvas>
+  <div class="controls">
+    <label for="resolution" id="resolutionLabel">Resolution: 5 px</label>
+    <input type="range" name="" id="resolution" name="resolution" min="1" max="20" value="5">
+  </div>
+</div>
+
+<script>
+  const canvas = document.getElementById('canvas1')
+  const inputSlider = document.getElementById('resolution')
+  const inputLabel = document.getElementById('resolutionLabel')
+  const ctx = canvas.getContext('2d')
+
+  const image1 = new Image()
+  image1.src = '/assets/jho2.jpeg'
+
+  class Cell {
+    constructor(x, y, symbol, color) {
+      this.x = x
+      this.y = y
+      this.symbol = symbol
+      this.color = color
+    }
+
+    draw(ctx) {
+      ctx.fillStyle = 'rgba(255, 255, 255,.5)'
+      ctx.fillText(this.symbol, this.x + 0.5, this.y + 0.5)
+      ctx.fillStyle = this.color
+      ctx.fillText(this.symbol, this.x, this.y)
+    }
+  }
+
+  class AsciiEffect {
+    #imageCellArray = []
+    #symbols = []
+    #pixels = []
+    #ctx
+    #width
+    #height
+
+    constructor(ctx, width, height, img) {
+      this.#ctx = ctx
+      this.#width = width
+      this.#height = height
+      this.#ctx.drawImage(img, 0, 0, this.#width, this.#height)
+      this.#pixels = this.#ctx.getImageData(0, 0, this.#width, this.#height)
+      console.log(this.#pixels)
+    }
+
+    #convertToSymbol(color) {
+      if (color > 250) return '@'
+      if (color > 240) return '*'
+      if (color > 220) return '#'
+      if (color > 200) return '/'
+      if (color > 180) return '%'
+      if (color > 160) return '&'
+      if (color > 140) return ')'
+      if (color > 120) return '('
+      if (color > 100) return '<'
+      if (color > 80) return '>'
+      if (color > 60) return '='
+      if (color > 40) return '!'
+      if (color > 20) return '?'
+      return ''
+    }
+
+    #scanImage(cellSize) {
+      this.#imageCellArray = []
+
+      for (let y = 0; y < this.#pixels.height; y += cellSize) {
+        for (let x = 0; x < this.#pixels.width; x+= cellSize) {
+          const posX = x * 4
+          const posY = y * 4
+          const pos = (posY * this.#pixels.width) + posX
+
+          if (this.#pixels.data[pos + 3] > 128) {
+            const red = this.#pixels.data[pos]
+            const green = this.#pixels.data[pos + 1]
+            const blue = this.#pixels.data[pos + 2]
+            const total = red + green + blue
+            const avgColorValue = total / 3
+            const color = `rgb(${red}, ${green}, ${blue})`
+            const symbol = this.#convertToSymbol(avgColorValue)
+            if (total > 200) {
+              this.#imageCellArray.push(new Cell(x, y, symbol, color))
+            }
+          }
+        }
+      }
+
+      console.log(this.#imageCellArray)
+    }
+
+    #drawAscii() {
+      this.#ctx.clearRect(0, 0, this.#width, this.#height)
+
+      for (let index = 0; index < this.#imageCellArray.length; index++) {
+        this.#imageCellArray[index].draw(this.#ctx)
+      }
+    }
+
+    draw(cellSize) {
+      this.#scanImage(cellSize)
+      this.#drawAscii()
+    }
+  }
+
+  let effect
+  image1.onload = function initialize() {
+    canvas.width = image1.width
+    canvas.height = image1.height
+
+    effect = new AsciiEffect(ctx, image1.width, image1.height, image1)
+    effect.draw(10)
+  }
+
+  inputSlider.addEventListener('change', function(event) {
+    if (Number(event.target.value) === 1) {
+      inputLabel.innerHTML = `Original Image`
+      ctx.drawImage(image1, 0, 0, image1.width, image1.height)
+    } else {
+      inputLabel.innerHTML = `Resolution: ${event.target.value} px`
+      console.log(event.target.value)
+      ctx.font = Number(event.target.value) * 1.2 + 'px Verdana'
+      effect.draw(Number(event.target.value))
+    }
+  })
+</script>
+</body>
+</html>
