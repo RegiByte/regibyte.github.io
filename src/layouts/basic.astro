@@ -2,31 +2,29 @@
 import MainHead from "../components/seo/MainHead.astro"
 import DarkMode from "../components/ui/theme/darkModeScript.astro"
 import Background from "../components/ui/theme/background.astro"
-import SocialLink from "../components/ui/socialLink.jsx"
-import {Header} from "../components/ui/theme/header.jsx"
-import {Container} from "../components/ui/theme/container.jsx"
-import { InstagramIcon, GitHubIcon, LinkedInIcon } from "../components/ui/socialIcons.jsx"
-import {dude} from "../config/dude.ts"
-const {frontmatter} = Astro.props;
+import { Footer } from "../components/ui/theme/footer.jsx"
+import { Header } from "../components/ui/theme/header.jsx"
+const { frontmatter } = Astro.props;
 // Compile time JS Here
 ---
 
 <html lang="en">
 <head>
   <MainHead
-      title={frontmatter?.title || "Reginaldo Junior | Dev"}
-      description={frontmatter?.description || "This is RegiByte's Portfolio! Check it out. cool animations, canvas animations and stuff yaaaaay!!"}
+    title={frontmatter?.title || "Reginaldo Junior | Dev"}
+    description={frontmatter?.description || "This is RegiByte's Portfolio! Check it out. cool animations, canvas animations and stuff yaaaaay!!"}
   />
 </head>
 <body class="flex h-full flex-col bg-zinc-50 dark:bg-black">
-<DarkMode is:inline/>
-<Background/>
+<DarkMode is:inline />
+<Background />
 
 <div class="relative">
-  <Header client:load currentRoute={Astro.url.pathname}/>
-    <main>
-      <slot/>
-    </main>
+  <Header client:load currentRoute={Astro.url.pathname} />
+  <main>
+    <slot />
+  </main>
+  <Footer />
 </div>
 </body>
 </html>

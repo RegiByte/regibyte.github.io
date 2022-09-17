@@ -1,48 +1,60 @@
 ---
-import MainHead from "../components/seo/MainHead.astro"
-import DarkMode from "../components/ui/theme/darkModeScript.astro"
-import Background from "../components/ui/theme/background.astro"
+import BasicLayout from '../layouts/basic.astro'
 import SocialLink from "../components/ui/socialLink.jsx"
-import {Header} from "../components/ui/theme/header.jsx"
-import {Container} from "../components/ui/theme/container.jsx"
+import Resume from "../components/ui/theme/resume.jsx"
+import { ArticleCardInline } from "../components/ui/articleCard.jsx"
+import Photos from "../components/ui/photos.jsx"
+import { Container } from "../components/ui/theme/container.jsx"
 import { InstagramIcon, GitHubIcon, LinkedInIcon } from "../components/ui/socialIcons.jsx"
-import {dude} from "../config/dude.ts"
+import { dude } from "../config/dude.ts"
 
 // Compile time JS Here
+const mdArticles = await Astro.glob('./articles/*.md')
+const mdxArticles = await Astro.glob('./articles/*.mdx')
+const allArticles = [...mdArticles, ...mdxArticles].sort((articleA, articleB) => {
+const aDate = new Date(`${articleA.frontmatter.date}T00:00:00Z`).getTime()
+const bDate = new Date(`${articleB.frontmatter.date}T00:00:00Z`).getTime()
+return bDate - aDate
+})
+
+const articles = allArticles.slice(0, 3)
+
 ---
-
-<html lang="en">
-<head>
-  <MainHead
-      title="Reginaldo Junior | Dev"
-      description="This is RegiByte's Portfolio! Check it out. cool animations, canvas animations and stuff yaaaaay!!"
-  />
-</head>
-<body class="flex h-full flex-col bg-zinc-50 dark:bg-black">
-<DarkMode is:inline/>
-<Background/>
-
-<div class="relative">
-  <Header client:load currentRoute={Astro.url.pathname}/>
-  <main>
-    <Container className="mt-9">
-      <div class="max-w-2xl">
-        <h1 class="text-4xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 sm:text-5xl">
-          Software developer, 3d artist.
-        </h1>
-        <p class="mt-6 text-base text-zinc-600 dark:text-zinc-400">
-          I’m Reginaldo, a software developer, game dev and 3d illustrator based in Londrina
-          City, Brazil. I’ve been working with development since I was 13 years old, now with more than {(new Date().getFullYear())-2014} years of experience,
-          I have created dozens of projects that are used by thousands of people in U.S and Brazil.
-        </p>
-        <div class="mt-6 flex gap-6">
-          <SocialLink target="_blank" href={dude.social.instagram} icon={InstagramIcon}/>
-          <SocialLink target="_blank" href={dude.social.linkedin} icon={LinkedInIcon}/>
-          <SocialLink target="_blank" href={dude.social.github} icon={GitHubIcon}/>
-        </div>
+<BasicLayout>
+  <Container className="mt-9">
+    <div class="max-w-2xl">
+      <h1 class="text-4xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 sm:text-5xl">
+        {dude.home.titles}
+      </h1>
+      <p class="mt-6 text-base text-zinc-600 dark:text-zinc-400 text-justify">
+        {dude.home.bio}
+      </p>
+      <div class="mt-6 flex gap-6">
+        <SocialLink target="_blank" href={dude.social.instagram} icon={InstagramIcon} />
+        <SocialLink target="_blank" href={dude.social.linkedin} icon={LinkedInIcon} />
+        <SocialLink target="_blank" href={dude.social.github} icon={GitHubIcon} />
       </div>
-    </Container>
-  </main>
-</div>
-</body>
-</html>
+    </div>
+  </Container>
+  <Photos
+    photos={dude.home.photos}
+  />
+  <Container className="mt-24 md:mt-28">
+    <div class="mx-auto grid max-w-xl grid-cols-1 gap-y-20 lg:max-w-none lg:grid-cols-2">
+      <div class="flex flex-col gap-16">
+        {articles.map(article => (
+          <ArticleCardInline
+            url={article.url}
+            key={article.url}
+            title={article.frontmatter.title}
+            description={article.frontmatter.description}
+            date={article.frontmatter.date}
+          />
+        ))}
+      </div>
+      <div class="space-y-10 lg:pl-16 xl:pl-24">
+        <Resume />
+      </div>
+    </div>
+  </Container>
+</BasicLayout>

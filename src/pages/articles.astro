@@ -1,11 +1,31 @@
 ---
 import Layout from '../layouts/basic.astro'
 import {Container} from '../components/ui/theme/container.jsx'
+import ArticleCard from '../components/ui/articleCard.jsx'
+import SimpleLayout from '../components/ui/simpleLayout.jsx'
+
+const mdArticles = await Astro.glob('./articles/*.md')
+const mdxArticles = await Astro.glob('./articles/*.mdx')
+const articles = [...mdArticles, ...mdxArticles].sort((articleA, articleB) => {
+  const aDate = new Date(`${articleA.frontmatter.date}T00:00:00Z`).getTime()
+  const bDate = new Date(`${articleB.frontmatter.date}T00:00:00Z`).getTime()
+  return bDate - aDate
+})
 ---
 <Layout>
-  <Container className="mt-9 text-base text-zinc-600 dark:text-zinc-400">
-    <p>
-      I Will write some articles and link some of my existing ones here
-    </p>
-  </Container>
+  <SimpleLayout title="Writing on software development practices and graphics experiments" content="RegiByte's articles on graphics and programming are here! check it out">
+    <div class="md:border-l md:border-zinc-100 md:pl-6 md:dark:border-zinc-700/40">
+      <div class="flex max-w-3xl flex-col space-y-16">
+        {articles.map(article => (
+          <ArticleCard
+            key={article.url}
+            date={article.frontmatter.date}
+            url={article.url}
+            title={article.frontmatter.title}
+            description={article.frontmatter.description}
+          />
+        ))}
+      </div>
+    </div>
+  </SimpleLayout>
 </Layout>

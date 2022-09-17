@@ -10,7 +10,14 @@ import {remarkReadingTime} from "./plugins/markdown/readingTime.mjs";
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [preact(), react(), tailwind(), svelte(), mdx()],
+  integrations: [preact(), react(), tailwind(), svelte(), mdx({
+    rehypePlugins: [
+      a11yEmoji,
+    ],
+    remarkPlugins: [
+      remarkReadingTime
+    ],
+  })],
   markdown: {
     rehypePlugins: [
       a11yEmoji,

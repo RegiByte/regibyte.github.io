@@ -117,10 +117,9 @@ function MobileNavigation({currentRoute, ...props}) {
             </div>
             <nav className="mt-6">
               <ul className="-my-2 divide-y divide-zinc-100 text-base text-zinc-800 dark:divide-zinc-100/5 dark:text-zinc-300">
-                <MobileNavItem href="/about">About</MobileNavItem>
-                <MobileNavItem href="/articles">Articles</MobileNavItem>
-                <MobileNavItem href="/projects">Projects</MobileNavItem>
-                <MobileNavItem href="/tools">Tools</MobileNavItem>
+                {dude.nav.map(navItem => (
+                  <MobileNavItem key={navItem.path} href={navItem.path}>{navItem.label}</MobileNavItem>
+                ))}
               </ul>
             </nav>
           </Popover.Panel>
@@ -157,10 +156,9 @@ function DesktopNavigation({currentRoute, ...props}) {
   return (
     <nav {...props}>
       <ul className="flex rounded-full bg-white/90 px-3 text-sm font-medium text-zinc-800 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 backdrop-blur dark:bg-zinc-800/90 dark:text-zinc-200 dark:ring-white/10">
-        <NavItem currentRoute={currentRoute} href="/about">About</NavItem>
-        <NavItem currentRoute={currentRoute} href="/articles">Articles</NavItem>
-        <NavItem currentRoute={currentRoute} href="/projects">Projects</NavItem>
-        <NavItem currentRoute={currentRoute} href="/tools">Tools</NavItem>
+        {dude.nav.map(navItem => (
+          <NavItem key={navItem.path} currentRoute={currentRoute} href={navItem.path}>{navItem.label}</NavItem>
+        ))}
       </ul>
     </nav>
   )
@@ -175,7 +173,6 @@ function ModeToggle() {
   }
 
   function toggleMode() {
-    console.log('toggling darkmode')
     disableTransitionsTemporarily()
 
     let darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
