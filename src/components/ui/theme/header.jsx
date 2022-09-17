@@ -131,7 +131,7 @@ function MobileNavigation({currentRoute, ...props}) {
 }
 
 function NavItem({ href, children, currentRoute }) {
-  let isActive = currentRoute === href
+  let isActive = currentRoute === (currentRoute.endsWith('/') ? `${href}/` : href)
 
   return (
     <li>
