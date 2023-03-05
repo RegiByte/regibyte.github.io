@@ -16,14 +16,18 @@ export const dude = {
       label: 'Articles',
       path: '/articles'
     },
-    {
-      label: 'Projects',
-      path: '/projects'
-    },
+    // {
+    //   label: 'Projects',
+    //   path: '/projects'
+    // },
     {
       label: 'Tools',
       path: '/tools'
     },
+    {
+      label: 'Effects',
+      path: '/effects'
+    }
   ],
   social: {
     instagram: 'https://www.instagram.com/regibytes/',

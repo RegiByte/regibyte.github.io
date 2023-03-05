@@ -1,4 +1,5 @@
 ---
+
 import BasicLayout from '../layouts/basic.astro'
 import SocialLink from "../components/ui/socialLink.jsx"
 import Resume from "../components/ui/theme/resume.jsx"
@@ -10,8 +11,8 @@ import { dude } from "../config/dude.ts"
 
 // Compile time JS Here
 const mdArticles = await Astro.glob('./articles/*.md')
-const mdxArticles = await Astro.glob('./articles/*.mdx')
-const allArticles = [...mdArticles, ...mdxArticles].sort((articleA, articleB) => {
+// const mdxArticles = await Astro.glob('./articles/*.mdx')
+const allArticles = [...mdArticles].sort((articleA, articleB) => {
 const aDate = new Date(`${articleA.frontmatter.date}T00:00:00Z`).getTime()
 const bDate = new Date(`${articleB.frontmatter.date}T00:00:00Z`).getTime()
 return bDate - aDate

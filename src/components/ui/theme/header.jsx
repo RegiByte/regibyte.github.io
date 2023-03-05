@@ -1,7 +1,7 @@
-import { Popover, Transition } from '@headlessui/react'
+import {Popover, Transition} from '@headlessui/react'
 import clsx from 'clsx'
-import { Container } from './container'
-import { Fragment, useEffect, useRef } from 'react'
+import {Container} from './container'
+import {Fragment, useEffect, useRef} from 'react'
 import {dude} from '../../../config/dude'
 
 function CloseIcon(props) {
@@ -43,7 +43,8 @@ function SunIcon(props) {
       aria-hidden="true"
       {...props}
     >
-      <path d="M8 12.25A4.25 4.25 0 0 1 12.25 8v0a4.25 4.25 0 0 1 4.25 4.25v0a4.25 4.25 0 0 1-4.25 4.25v0A4.25 4.25 0 0 1 8 12.25v0Z" />
+      <path
+        d="M8 12.25A4.25 4.25 0 0 1 12.25 8v0a4.25 4.25 0 0 1 4.25 4.25v0a4.25 4.25 0 0 1-4.25 4.25v0A4.25 4.25 0 0 1 8 12.25v0Z"/>
       <path
         d="M12.25 3v1.5M21.5 12.25H20M18.791 18.791l-1.06-1.06M18.791 5.709l-1.06 1.06M12.25 20v1.5M4.5 12.25H3M6.77 6.77 5.709 5.709M6.77 17.73l-1.061 1.061"
         fill="none"
@@ -65,7 +66,7 @@ function MoonIcon(props) {
   )
 }
 
-function MobileNavItem({ href, children }) {
+function MobileNavItem({href, children}) {
   return (
     <li>
       <Popover.Button as={'a'} href={href} className="block py-2">
@@ -78,9 +79,11 @@ function MobileNavItem({ href, children }) {
 function MobileNavigation({currentRoute, ...props}) {
   return (
     <Popover {...props}>
-      <Popover.Button className="group flex items-center rounded-full bg-white/90 px-4 py-2 text-sm font-medium text-zinc-800 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 backdrop-blur dark:bg-zinc-800/90 dark:text-zinc-200 dark:ring-white/10 dark:hover:ring-white/20">
+      <Popover.Button
+        className="group flex items-center rounded-full bg-white/90 px-4 py-2 text-sm font-medium text-zinc-800 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 backdrop-blur dark:bg-zinc-800/90 dark:text-zinc-200 dark:ring-white/10 dark:hover:ring-white/20">
         Menu
-        <ChevronDownIcon className="ml-3 h-auto w-2 stroke-zinc-500 group-hover:stroke-zinc-700 dark:group-hover:stroke-zinc-400" />
+        <ChevronDownIcon
+          className="ml-3 h-auto w-2 stroke-zinc-500 group-hover:stroke-zinc-700 dark:group-hover:stroke-zinc-400"/>
       </Popover.Button>
       <Transition.Root>
         <Transition.Child
@@ -92,7 +95,7 @@ function MobileNavigation({currentRoute, ...props}) {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <Popover.Overlay className="fixed inset-0 z-50 bg-zinc-800/40 backdrop-blur-sm dark:bg-black/80" />
+          <Popover.Overlay className="fixed inset-0 z-50 bg-zinc-800/40 backdrop-blur-sm dark:bg-black/80"/>
         </Transition.Child>
         <Transition.Child
           as={Fragment}
@@ -109,14 +112,15 @@ function MobileNavigation({currentRoute, ...props}) {
           >
             <div className="flex flex-row-reverse items-center justify-between">
               <Popover.Button aria-label="Close menu" className="-m-1 p-1">
-                <CloseIcon className="h-6 w-6 text-zinc-500 dark:text-zinc-400" />
+                <CloseIcon className="h-6 w-6 text-zinc-500 dark:text-zinc-400"/>
               </Popover.Button>
               <h2 className="text-sm font-medium text-zinc-600 dark:text-zinc-400">
                 Navigation
               </h2>
             </div>
             <nav className="mt-6">
-              <ul className="-my-2 divide-y divide-zinc-100 text-base text-zinc-800 dark:divide-zinc-100/5 dark:text-zinc-300">
+              <ul
+                className="-my-2 divide-y divide-zinc-100 text-base text-zinc-800 dark:divide-zinc-100/5 dark:text-zinc-300">
                 {dude.nav.map(navItem => (
                   <MobileNavItem key={navItem.path} href={navItem.path}>{navItem.label}</MobileNavItem>
                 ))}
@@ -129,8 +133,8 @@ function MobileNavigation({currentRoute, ...props}) {
   )
 }
 
-function NavItem({ href, children, currentRoute }) {
-  let isActive = currentRoute === (currentRoute.endsWith('/') ? `${href}/` : href)
+function NavItem({href, children, currentRoute, exact = false}) {
+  let isActive = exact ? currentRoute === (currentRoute.endsWith('/') ? `${href}/` : href) : currentRoute.includes(href)
 
   return (
     <li>
@@ -145,7 +149,8 @@ function NavItem({ href, children, currentRoute }) {
       >
         {children}
         {isActive && (
-          <span className="absolute inset-x-1 [height:2px] -bottom-px h-px bg-gradient-to-r from-teal-500/0 via-teal-500/40 to-teal-500/0 dark:from-teal-400/0 dark:via-teal-400/40 dark:to-teal-400/0" />
+          <span
+            className="absolute inset-x-1 [height:2px] -bottom-px h-px bg-gradient-to-r from-teal-500/0 via-teal-500/40 to-teal-500/0 dark:from-teal-400/0 dark:via-teal-400/40 dark:to-teal-400/0"/>
         )}
       </a>
     </li>
@@ -155,7 +160,8 @@ function NavItem({ href, children, currentRoute }) {
 function DesktopNavigation({currentRoute, ...props}) {
   return (
     <nav {...props}>
-      <ul className="flex rounded-full bg-white/90 px-3 text-sm font-medium text-zinc-800 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 backdrop-blur dark:bg-zinc-800/90 dark:text-zinc-200 dark:ring-white/10">
+      <ul
+        className="flex rounded-full bg-white/90 px-3 text-sm font-medium text-zinc-800 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 backdrop-blur dark:bg-zinc-800/90 dark:text-zinc-200 dark:ring-white/10">
         {dude.nav.map(navItem => (
           <NavItem key={navItem.path} currentRoute={currentRoute} href={navItem.path}>{navItem.label}</NavItem>
         ))}
@@ -193,8 +199,10 @@ function ModeToggle() {
       className="group rounded-full bg-white/90 px-3 py-2 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 backdrop-blur transition dark:bg-zinc-800/90 dark:ring-white/10 dark:hover:ring-white/20"
       onClick={toggleMode}
     >
-      <SunIcon className="h-6 w-6 fill-zinc-100 stroke-zinc-500 transition group-hover:fill-zinc-200 group-hover:stroke-zinc-700 dark:hidden [@media(prefers-color-scheme:dark)]:fill-teal-50 [@media(prefers-color-scheme:dark)]:stroke-teal-500 [@media(prefers-color-scheme:dark)]:group-hover:fill-teal-50 [@media(prefers-color-scheme:dark)]:group-hover:stroke-teal-600" />
-      <MoonIcon className="hidden h-6 w-6 fill-zinc-700 stroke-zinc-500 transition dark:block [@media(prefers-color-scheme:dark)]:group-hover:stroke-zinc-400 [@media_not_(prefers-color-scheme:dark)]:fill-teal-400/10 [@media_not_(prefers-color-scheme:dark)]:stroke-teal-500" />
+      <SunIcon
+        className="h-6 w-6 fill-zinc-100 stroke-zinc-500 transition group-hover:fill-zinc-200 group-hover:stroke-zinc-700 dark:hidden [@media(prefers-color-scheme:dark)]:fill-teal-50 [@media(prefers-color-scheme:dark)]:stroke-teal-500 [@media(prefers-color-scheme:dark)]:group-hover:fill-teal-50 [@media(prefers-color-scheme:dark)]:group-hover:stroke-teal-600"/>
+      <MoonIcon
+        className="hidden h-6 w-6 fill-zinc-700 stroke-zinc-500 transition dark:block [@media(prefers-color-scheme:dark)]:group-hover:stroke-zinc-400 [@media_not_(prefers-color-scheme:dark)]:fill-teal-400/10 [@media_not_(prefers-color-scheme:dark)]:stroke-teal-500"/>
     </button>
   )
 }
@@ -205,7 +213,7 @@ function clamp(number, a, b) {
   return Math.min(Math.max(number, min), max)
 }
 
-function AvatarContainer({ className, ...props }) {
+function AvatarContainer({className, ...props}) {
   return (
     <div
       className={clsx(
@@ -217,7 +225,7 @@ function AvatarContainer({ className, ...props }) {
   )
 }
 
-function Avatar({ large = false, className, ...props }) {
+function Avatar({large = false, className, ...props}) {
   return (
     <a
       href="/"
@@ -258,7 +266,7 @@ export function Header({currentRoute}) {
     }
 
     function updateHeaderStyles() {
-      let { top, height } = headerRef.current.getBoundingClientRect()
+      let {top, height} = headerRef.current.getBoundingClientRect()
       let scrollY = clamp(
         window.scrollY,
         0,
@@ -332,11 +340,11 @@ export function Header({currentRoute}) {
     }
 
     updateStyles()
-    window.addEventListener('scroll', updateStyles, { passive: true })
+    window.addEventListener('scroll', updateStyles, {passive: true})
     window.addEventListener('resize', updateStyles)
 
     return () => {
-      window.removeEventListener('scroll', updateStyles, { passive: true })
+      window.removeEventListener('scroll', updateStyles, {passive: true})
       window.removeEventListener('resize', updateStyles)
     }
   }, [isHomePage])
@@ -358,11 +366,11 @@ export function Header({currentRoute}) {
             />
             <Container
               className="top-0 order-last -mb-3 pt-3"
-              style={{ position: 'var(--header-position)' }}
+              style={{position: 'var(--header-position)'}}
             >
               <div
                 className="top-[var(--avatar-top,theme(spacing.3))] w-full"
-                style={{ position: 'var(--header-inner-position)' }}
+                style={{position: 'var(--header-inner-position)'}}
               >
                 <div className="relative">
                   <AvatarContainer
@@ -375,7 +383,7 @@ export function Header({currentRoute}) {
                   <Avatar
                     large
                     className="block h-16 w-16 origin-left"
-                    style={{ transform: 'var(--avatar-image-transform)' }}
+                    style={{transform: 'var(--avatar-image-transform)'}}
                   />
                 </div>
               </div>
@@ -385,34 +393,34 @@ export function Header({currentRoute}) {
         <div
           ref={headerRef}
           className="top-0 z-10 h-16 pt-6"
-          style={{ position: 'var(--header-position)' }}
+          style={{position: 'var(--header-position)'}}
         >
           <Container
             className="top-[var(--header-top,theme(spacing.6))] w-full"
-            style={{ position: 'var(--header-inner-position)' }}
+            style={{position: 'var(--header-inner-position)'}}
           >
             <div className="relative flex gap-4">
               <div className="flex flex-1">
                 {!isHomePage && (
                   <AvatarContainer>
-                    <Avatar />
+                    <Avatar/>
                   </AvatarContainer>
                 )}
               </div>
               <div className="flex flex-1 justify-end md:justify-center">
-                <MobileNavigation className="pointer-events-auto md:hidden" />
-                <DesktopNavigation currentRoute={currentRoute} className="pointer-events-auto hidden md:block" />
+                <MobileNavigation className="pointer-events-auto md:hidden"/>
+                <DesktopNavigation currentRoute={currentRoute} className="pointer-events-auto hidden md:block"/>
               </div>
               <div className="flex justify-end md:flex-1">
                 <div className="pointer-events-auto">
-                  <ModeToggle />
+                  <ModeToggle/>
                 </div>
               </div>
             </div>
           </Container>
         </div>
       </header>
-      {isHomePage && <div style={{ height: 'var(--content-offset)' }} />}
+      {isHomePage && <div style={{height: 'var(--content-offset)'}}/>}
     </>
   )
 }

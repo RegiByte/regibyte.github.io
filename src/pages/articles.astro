@@ -5,8 +5,8 @@ import ArticleCard from '../components/ui/articleCard.jsx'
 import SimpleLayout from '../components/ui/simpleLayout.jsx'
 
 const mdArticles = await Astro.glob('./articles/*.md')
-const mdxArticles = await Astro.glob('./articles/*.mdx')
-const articles = [...mdArticles, ...mdxArticles].sort((articleA, articleB) => {
+// const mdxArticles = await Astro.glob('./articles/*.mdx')
+const articles = [...mdArticles].sort((articleA, articleB) => {
   const aDate = new Date(`${articleA.frontmatter.date}T00:00:00Z`).getTime()
   const bDate = new Date(`${articleB.frontmatter.date}T00:00:00Z`).getTime()
   return bDate - aDate

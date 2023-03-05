@@ -1,5 +1,4 @@
 import { defineConfig } from 'astro/config';
-import preact from '@astrojs/preact';
 import react from "@astrojs/react";
 import tailwind from "@astrojs/tailwind";
 import svelte from "@astrojs/svelte";
@@ -10,7 +9,7 @@ import {remarkReadingTime} from "./plugins/markdown/readingTime.mjs";
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [preact(), react(), tailwind(), svelte(), mdx({
+  integrations: [react(), tailwind(), svelte(), mdx({
     rehypePlugins: [
       a11yEmoji,
     ],

@@ -1,0 +1,26 @@
+---
+import {getCollection} from "astro:content";
+import Effect from "../../layouts/effect.astro";
+
+export async function getStaticPaths() {
+    const effectsEntries = await getCollection('effects')
+
+    return effectsEntries.map(entry => {
+        return {
+            params: {
+                slug: entry.slug,
+            },
+            props: {
+                entry
+            }
+        }
+    })
+}
+
+const {entry} = Astro.props
+const {Content} = await entry.render()
+---
+
+<Effect tags={entry.data.tags} title={entry.data.title} canvasCount={entry.data?.canvasCount ?? 1} clientScripts={entry.data?.clientScripts || []}>
+    <Content/>
+</Effect>
