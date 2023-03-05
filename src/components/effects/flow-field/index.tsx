@@ -18,7 +18,7 @@ const FlowFieldEffect: React.FC<FlowFieldEffectProps> = (props) => {
         onZoomChange={flowField.onZoomChange}
         onCurveChange={flowField.onCurveChange}
         onChangeColors={flowField.onChangeColors}
-        sourceCodeUrl={`${repoUrl}/tree/main/src/components/effects/flow-field/index.tsx`}
+        sourceCodeUrl={`${repoUrl}/tree/main/src/components/effects/flow-field/flow-field.js`}
       />
     </>
   );
