@@ -46,15 +46,17 @@ const FlowFieldControls: React.FC<FlowFieldControlsProps> = ({
 
   return (
     <div className="absolute bottom-20 left-0 z-10 h-8 w-full px-10 md:bottom-10">
-      <div className="flex w-full flex-wrap justify-center gap-3 rounded bg-slate-100 px-4 py-3 md:flex-nowrap md:justify-between">
+      <div className="flex w-full flex-wrap justify-center gap-3 rounded dark:bg-zinc-800/90 bg-slate-100 px-4 py-3 md:justify-between">
         {/** Left side */}
-        <div className="flex gap-3">
+        <div className="flex gap-3 flex-wrap text-neutral-500 dark:text-neutral-200">
           <div className="inline-flex items-center justify-center gap-2">
             <label htmlFor="Zoom">Zoom</label>
             <input onChange={handleZoomChange} type="range" value={zoom} min={0.01} max={5} step={0.01} /> {zoom}
           </div>
 
-          <button onClick={handleRandomize} className="inline-flex items-center gap-2 rounded bg-slate-300 px-2 py-1">
+          <button
+            onClick={handleRandomize}
+            className="inline-flex items-center gap-2 rounded bg-slate-300 px-2 py-1 text-neutral-700">
             Randomize
             <ArrowPathRoundedSquareIcon className="h-4 w-4" />
           </button>
@@ -73,7 +75,11 @@ const FlowFieldControls: React.FC<FlowFieldControlsProps> = ({
         {/** Right Side */}
         {!!sourceCodeUrl && (
           <div className="flex items-center">
-            <a href={sourceCodeUrl} className="inline-flex gap-2 rounded px-2 py-1 hover:bg-slate-200" target="_blank">
+            <a
+              href={sourceCodeUrl}
+              className={`inline-flex gap-2 rounded px-2 py-1 hover:bg-slate-200
+                 text-neutral-600 dark:text-neutral-700 dark:bg-slate-200`}
+              target="_blank">
               <GitHubIcon className="h-6 w-6" />
               View Source
             </a>

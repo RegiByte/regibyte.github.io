@@ -44,7 +44,7 @@ const NewColorPicker: React.FC<NewColorPickerProps> = ({ initialColor = '#000000
 
   return (
     <div className="relative inline-flex items-center gap-2">
-      <button onClick={handleAddNewColor} className={'rounded bg-slate-300 px-2 py-1'}>
+      <button onClick={handleAddNewColor} className={'rounded bg-slate-300 px-2 py-1 text-neutral-700'}>
         Confirm (after selecting custom color)
       </button>
       <input type="color" className={''} value={currentColor} onChange={handleColorChange} />
