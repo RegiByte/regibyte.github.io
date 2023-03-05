@@ -1,9 +1,50 @@
 import miniAvatar from '../assets/images/avatar.png';
+import flowFieldPhoto from '../assets/images/effects/flow-field.png';
 import aeStudioLogo from '../assets/images/logos/ae-studio.png';
 import trimbleLogo from '../assets/images/logos/trimble.svg';
 import pdv365Logo from '../assets/images/logos/pdv365.jpg';
 
-export const dude = {
+type PhotoItem =
+  | string
+  | {
+      picture: string;
+      title: string;
+      url: string;
+    };
+
+interface ResumeItem {
+  company: string;
+  title: string;
+  logo: string;
+  start:
+    | string
+    | {
+        label: string;
+        dateTime: number;
+      };
+  end:
+    | string
+    | {
+        label: string;
+        dateTime: number;
+      };
+}
+
+export interface Dude {
+  avatar: {
+    mini: string;
+  };
+  nav: { label: string; path: string }[];
+  social: Record<string, string>;
+  home: {
+    titles: string;
+    bio: string;
+    photos: PhotoItem[];
+    resume: ResumeItem[];
+  };
+}
+
+export const dude: Dude = {
   avatar: {
     mini: miniAvatar,
   },
@@ -14,7 +55,7 @@ export const dude = {
     // },
     {
       label: 'Articles',
-      path: '/articles'
+      path: '/articles',
     },
     // {
     //   label: 'Projects',
@@ -22,12 +63,12 @@ export const dude = {
     // },
     {
       label: 'Tools',
-      path: '/tools'
+      path: '/tools',
     },
     {
       label: 'Effects',
-      path: '/effects'
-    }
+      path: '/effects',
+    },
   ],
   social: {
     instagram: 'https://www.instagram.com/regibytes/',
@@ -38,12 +79,16 @@ export const dude = {
     titles: 'Software developer, 3d artist, mentor.',
     bio: `I’m Reginaldo, a web developer, game dev and 3d illustrator based in Londrina
           City, Brazil. I’ve been working with development since I was 13 years old, now with more than 
-          ${(new Date().getFullYear()) - 2014} years of experience, I have created dozens of projects that 
+          ${new Date().getFullYear() - 2014} years of experience, I have created dozens of projects that 
           are used by thousands of people in U.S and Brazil.
         `,
     photos: [
       'https://via.placeholder.com/256',
-      'https://via.placeholder.com/256',
+      {
+        picture: flowFieldPhoto,
+        url: '/effects/flow-field',
+        title: 'Flow Field Effect',
+      },
       'https://via.placeholder.com/256',
       'https://via.placeholder.com/256',
       'https://via.placeholder.com/256',

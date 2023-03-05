@@ -1,48 +1,58 @@
 ---
-
-import BasicLayout from '../layouts/basic.astro'
-import SocialLink from "../components/ui/socialLink.jsx"
-import Resume from "../components/ui/theme/resume.jsx"
-import { ArticleCardInline } from "../components/ui/articleCard.jsx"
-import Photos from "../components/ui/photos.jsx"
-import { Container } from "../components/ui/theme/container.jsx"
-import { InstagramIcon, GitHubIcon, LinkedInIcon } from "../components/ui/socialIcons.jsx"
-import { dude } from "../config/dude.ts"
+import BasicLayout from '../layouts/basic.astro';
+import SocialLink from '../components/ui/socialLink.jsx';
+import Resume from '../components/ui/theme/resume.jsx';
+import { ArticleCardInline } from '../components/ui/articleCard.jsx';
+import Photos from '../components/ui/photos.jsx';
+import { Container } from '../components/ui/theme/container.jsx';
+import { InstagramIcon, GitHubIcon, LinkedInIcon } from '../components/ui/socialIcons.jsx';
+import { dude } from '../config/dude.ts';
+import { getCollection } from 'astro:content';
 
 // Compile time JS Here
-const mdArticles = await Astro.glob('./articles/*.md')
+const mdArticles = await Astro.glob('./articles/*.md');
+const effects = (await getCollection('effects')).map(effect =>
+  ({
+    ...effect,
+    url: `/effects/${effect.slug}`,
+    frontmatter: {
+      url: effect.slug,
+      title: effect.data.title,
+      date: effect.data.date,
+      description: effect.data.description,
+    },
+  }));
 // const mdxArticles = await Astro.glob('./articles/*.mdx')
-const allArticles = [...mdArticles].sort((articleA, articleB) => {
-const aDate = new Date(`${articleA.frontmatter.date}T00:00:00Z`).getTime()
-const bDate = new Date(`${articleB.frontmatter.date}T00:00:00Z`).getTime()
-return bDate - aDate
-})
+const allArticles = [...mdArticles, ...effects].sort((articleA, articleB) => {
+  const aDate = new Date(`${articleA.frontmatter.date}T00:00:00Z`).getTime();
+  const bDate = new Date(`${articleB.frontmatter.date}T00:00:00Z`).getTime();
+  return bDate - aDate;
+});
 
-const articles = allArticles.slice(0, 3)
-
+const articles = allArticles.slice(0, 3);
 ---
 <BasicLayout>
-  <Container className="mt-9">
-    <div class="max-w-2xl">
-      <h1 class="text-4xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 sm:text-5xl">
+  <Container className='mt-9'>
+    <div class='max-w-2xl'>
+      <h1 class='text-4xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 sm:text-5xl'>
         {dude.home.titles}
       </h1>
-      <p class="mt-6 text-base text-zinc-600 dark:text-zinc-400 text-justify">
+      <p class='mt-6 text-base text-zinc-600 dark:text-zinc-400 text-justify'>
         {dude.home.bio}
       </p>
-      <div class="mt-6 flex gap-6">
-        <SocialLink target="_blank" href={dude.social.instagram} icon={InstagramIcon} />
-        <SocialLink target="_blank" href={dude.social.linkedin} icon={LinkedInIcon} />
-        <SocialLink target="_blank" href={dude.social.github} icon={GitHubIcon} />
+      <div class='mt-6 flex gap-6'>
+        <SocialLink target='_blank' href={dude.social.instagram} icon={InstagramIcon} />
+        <SocialLink target='_blank' href={dude.social.linkedin} icon={LinkedInIcon} />
+        <SocialLink target='_blank' href={dude.social.github} icon={GitHubIcon} />
       </div>
     </div>
   </Container>
   <Photos
     photos={dude.home.photos}
   />
-  <Container className="mt-24 md:mt-28">
-    <div class="mx-auto grid max-w-xl grid-cols-1 gap-y-20 lg:max-w-none lg:grid-cols-2">
-      <div class="flex flex-col gap-16">
+  <Container className='mt-24 md:mt-28'>
+    <div class='mx-auto grid max-w-xl grid-cols-1 gap-y-20 lg:max-w-none lg:grid-cols-2'>
+      <div class='flex flex-col gap-16'>
         {articles.map(article => (
           <ArticleCardInline
             url={article.url}
@@ -53,7 +63,7 @@ const articles = allArticles.slice(0, 3)
           />
         ))}
       </div>
-      <div class="space-y-10 lg:pl-16 xl:pl-24">
+      <div class='space-y-10 lg:pl-16 xl:pl-24'>
         <Resume />
       </div>
     </div>
