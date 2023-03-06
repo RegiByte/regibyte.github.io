@@ -45,10 +45,10 @@ const FlowFieldControls: React.FC<FlowFieldControlsProps> = ({
   };
 
   return (
-    <div className="absolute bottom-20 left-0 z-10 h-8 w-full px-10 md:bottom-10">
-      <div className="flex w-full flex-wrap justify-center gap-3 rounded dark:bg-zinc-800/90 bg-slate-100 px-4 py-3 md:justify-between">
+    <div className="fixed flex items-end bottom-0 left-0 z-10 h-8 w-full px-10 md:bottom-6">
+      <div className="flex w-full flex-wrap mb-4 md:mb-0 justify-center gap-3 rounded dark:bg-zinc-800/90 bg-slate-100 px-4 py-3 md:justify-between">
         {/** Left side */}
-        <div className="flex gap-3 flex-wrap text-neutral-500 dark:text-neutral-200">
+        <div className="flex gap-3 flex-wrap justify-center md:justify-start text-neutral-500 dark:text-neutral-200">
           <div className="inline-flex items-center justify-center gap-2">
             <label htmlFor="Zoom">Zoom</label>
             <input onChange={handleZoomChange} type="range" value={zoom} min={0.01} max={5} step={0.01} /> {zoom}

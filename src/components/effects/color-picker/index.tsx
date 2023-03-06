@@ -43,7 +43,7 @@ const NewColorPicker: React.FC<NewColorPickerProps> = ({ initialColor = '#000000
   };
 
   return (
-    <div className="relative inline-flex items-center gap-2">
+    <div className="relative inline-flex items-center justify-center md:justify-start gap-2 w-full md:w-auto">
       <button onClick={handleAddNewColor} className={'rounded bg-slate-300 px-2 py-1 text-neutral-700'}>
         Confirm (after selecting custom color)
       </button>
@@ -74,7 +74,7 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({ initialColors, onChang
   };
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center justify-center md:justify-start gap-2 flex-wrap">
       <div className="flex items-center gap-2">
         {colors.map((color, index) => (
           <ColorBlock key={index} color={color} onRemove={() => handleRemoveColor(color)} />
