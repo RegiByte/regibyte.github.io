@@ -21,7 +21,7 @@ export const setupEffect = () => {
   const image = new Image();
   image.src = bananaImage;
 
-  const effect = new Effect(canvas.width, canvas.height, image);
+  effect = new Effect(canvas.width, canvas.height, image);
   effect.init();
   effect.render(ctx);
 
@@ -36,6 +36,14 @@ export const setupEffect = () => {
     animate();
   };
 };
+
+export const onUpdateBananasCount = (bananasCount) => {
+  if (effect) {
+    console.log('updating bananas conut')
+    effect.particleCount = bananasCount;
+    effect.init();
+  }
+}
 
 export const clearEffect = () => {
   // TODO: implement clear function
@@ -61,7 +69,7 @@ class Effect {
   constructor(width, height, image) {
     this.width = width;
     this.height = height;
-    this.particleCount = 100;
+    this.particleCount = 50;
     this.particles = [];
     this.image = image;
     this.colors = [

@@ -1,14 +1,36 @@
 import React from 'react';
-import './bezier-field.css'
+import './bezier-field.css';
 import { useCanvasEffect } from '../../../hooks/useCanvasEffect';
-import * as bananaSpiral from "./banana-spiral.js"
+import * as bananaSpiral from './banana-spiral.js';
+import { BananaEffectControls } from './controls';
 
 export const BananaSpiral = () => {
-  useCanvasEffect(bananaSpiral.setupEffect, bananaSpiral.clearEffect, bananaSpiral.resizeEffect)
+  useCanvasEffect(
+    bananaSpiral.setupEffect,
+    bananaSpiral.clearEffect,
+    bananaSpiral.resizeEffect,
+  );
+
+  const [bananasCount, setBananasCount] = React.useState(50);
+
+  const handleBananasCountChange = (bananasCount: number) => {
+    setBananasCount(bananasCount)
+    console.log('bananasCount', bananasCount)
+    bananaSpiral.onUpdateBananasCount(bananasCount)
+  }
 
   return (
-    <div className="fixed top-28 z-10 w-full text-center max-w-full px-10">
-      <h1 className="text-3xl text-slate-100">100 Bananas spiralling on your screen</h1>
-    </div>
+    <>
+      <div className="fixed top-28 z-10 w-full text-center max-w-full px-10">
+        <h1 className="text-3xl text-slate-100">
+          100 Bananas spiralling on your screen
+        </h1>
+      </div>
+
+      <BananaEffectControls
+        bananasCount={bananasCount}
+        setBananasCount={handleBananasCountChange}
+      />
+    </>
   );
 };
