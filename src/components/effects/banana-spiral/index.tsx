@@ -15,7 +15,6 @@ export const BananaSpiral = () => {
 
   const handleBananasCountChange = (bananasCount: number) => {
     setBananasCount(bananasCount)
-    console.log('bananasCount', bananasCount)
     bananaSpiral.onUpdateBananasCount(bananasCount)
   }
 
@@ -23,7 +22,7 @@ export const BananaSpiral = () => {
     <>
       <div className="fixed top-28 z-10 w-full text-center max-w-full px-10">
         <h1 className="text-3xl text-slate-100">
-          100 Bananas spiralling on your screen
+          {bananasCount} Bananas spiralling on your screen
         </h1>
       </div>
 
