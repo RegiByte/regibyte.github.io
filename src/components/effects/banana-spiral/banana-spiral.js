@@ -61,7 +61,7 @@ class Effect {
   constructor(width, height, image) {
     this.width = width;
     this.height = height;
-    this.particleCount = 60;
+    this.particleCount = 100;
     this.particles = [];
     this.image = image;
     this.colors = [
@@ -137,6 +137,8 @@ class Particle {
       this.y = this.size;
       this.color = this.effect.getRandomColor();
       this.speedX = this.size * Math.random() * 0.1 + 0.5;
+      this.forceY = Math.random() * 100 + 70
+      // this.forceX = Math.random() * 50 + 30
     }
 
     if (this.x < -this.size) {
