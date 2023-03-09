@@ -1,26 +1,28 @@
 ---
-import {getCollection} from "astro:content";
-import Effect from "../../layouts/effect.astro";
+import { getCollection } from 'astro:content';
+import Effect from '../../layouts/effect.astro';
+import { getActiveEffects } from '../../content/utils';
 
 export async function getStaticPaths() {
-    const effectsEntries = await getCollection('effects')
+  const effectsEntries = await getActiveEffects();
 
-    return effectsEntries.map(entry => {
-        return {
-            params: {
-                slug: entry.slug,
-            },
-            props: {
-                entry
-            }
-        }
-    })
+  return effectsEntries.map(entry => {
+    return {
+      params: {
+        slug: entry.slug,
+      },
+      props: {
+        entry,
+      },
+    };
+  });
 }
 
-const {entry} = Astro.props
-const {Content} = await entry.render()
+const { entry } = Astro.props;
+const { Content } = await entry.render();
 ---
 
-<Effect tags={entry.data.tags} title={entry.data.title} canvasCount={entry.data?.canvasCount ?? 1} clientScripts={entry.data?.clientScripts || []}>
-    <Content/>
+<Effect tags={entry.data.tags} title={entry.data.title} canvasCount={entry.data?.canvasCount ?? 1}
+        clientScripts={entry.data?.clientScripts || []}>
+  <Content />
 </Effect>

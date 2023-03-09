@@ -7,7 +7,9 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "test": "vitest",
+    "coverage": "vitest run --coverage"
   },
   "devDependencies": {
     "@astrojs/mdx": "^0.17.2",
@@ -19,7 +21,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "sass": "^1.58.3",
-    "svelte": "^3.55.1"
+    "svelte": "^3.55.1",
+    "vitest": "^0.29.2"
   },
   "dependencies": {
     "@fec/remark-a11y-emoji": "^3.1.0",

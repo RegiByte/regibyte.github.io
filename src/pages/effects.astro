@@ -1,16 +1,18 @@
 ---
-import Layout from '../layouts/basic.astro'
-import {Container} from '../components/ui/theme/container.jsx'
-import EffectCard from '../components/ui/effectCard.jsx'
-import SimpleLayout from '../components/ui/simpleLayout.jsx'
+import Layout from '../layouts/basic.astro';
+import { Container } from '../components/ui/theme/container.jsx';
+import EffectCard from '../components/ui/effectCard.jsx';
+import SimpleLayout from '../components/ui/simpleLayout.jsx';
 import { getCollection } from 'astro:content';
+import { getActiveEffects } from '../content/utils';
 
-const effects = await getCollection('effects')
+const effects = await getActiveEffects();
 ---
 <Layout>
-  <SimpleLayout title="Experiments with graphic effects using HTML canvas" content="RegiByte's graphics effects programming are here! check it out">
-    <div class="md:border-l md:border-zinc-100 md:pl-6 md:dark:border-zinc-700/40">
-      <div class="flex max-w-3xl flex-col space-y-16">
+  <SimpleLayout title='Experiments with graphic effects using HTML canvas'
+                content="RegiByte's graphics effects programming are here! check it out">
+    <div class='md:border-l md:border-zinc-100 md:pl-6 md:dark:border-zinc-700/40'>
+      <div class='flex max-w-3xl flex-col space-y-16'>
         {effects.map(effect => (
           <EffectCard
             key={effect.slug}

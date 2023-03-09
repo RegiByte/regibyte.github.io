@@ -7,7 +7,8 @@ const effectCollection = defineCollection({
         date: z.string().optional(),
         tags: z.array(z.string()),
         image: z.string().optional(),
-        canvasCount: z.number().int().optional()
+        canvasCount: z.number().int().optional(),
+        disabled: z.boolean().optional(),
     })
 })
 
