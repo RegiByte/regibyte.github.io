@@ -1,5 +1,5 @@
 import React from 'react';
-import './bezier-field.css';
+import './banana-spiral.css';
 import { useCanvasEffect } from '../../../hooks/useCanvasEffect';
 import * as bananaSpiral from './banana-spiral.js';
 import { BananaEffectControls } from './controls';

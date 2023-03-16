@@ -1,5 +1,6 @@
 import miniAvatar from '../assets/images/avatar.png';
 import flowFieldPhoto from '../assets/images/effects/flow-field.png';
+import matrixPhoto from '../assets/images/effects/matrix.png'
 import aeStudioLogo from '../assets/images/logos/ae-studio.png';
 import trimbleLogo from '../assets/images/logos/trimble.svg';
 import pdv365Logo from '../assets/images/logos/pdv365.jpg';
@@ -89,7 +90,11 @@ export const dude: Dude = {
         url: '/effects/flow-field',
         title: 'Flow Field Effect',
       },
-      'https://via.placeholder.com/256',
+      {
+        picture: matrixPhoto,
+        url: '/effects/matrix',
+        title: 'Matrix Effect',
+      },
       'https://via.placeholder.com/256',
       'https://via.placeholder.com/256',
     ],
