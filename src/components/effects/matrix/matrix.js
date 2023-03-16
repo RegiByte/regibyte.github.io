@@ -74,6 +74,12 @@ class Effect {
     this.height = height;
     this.particles = [];
     this.numberOfParticles = 1000;
+
+    if (window.matchMedia('(max-width: 650px)').matches) {
+      this.numberOfParticles = 500;
+    }
+
+    console.log(this.numberOfParticles)
   }
 
   resize(width, height) {
