@@ -79,7 +79,13 @@ class Effect {
       this.numberOfParticles = 500;
     }
 
-    console.log(this.numberOfParticles)
+    if (window.matchMedia('(max-width: 500px)').matches) {
+      this.numberOfParticles = 300;
+    }
+
+    if (window.matchMedia('(max-width: 350px)').matches) {
+      this.numberOfParticles = 250;
+    }
   }
 
   resize(width, height) {

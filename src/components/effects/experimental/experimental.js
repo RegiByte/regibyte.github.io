@@ -10,40 +10,19 @@ function withContext(context, fn) {
   context.restore();
 }
 
-function getRandomLetter() {
-  const letterOptions =
-    'abcdefghijklmnopqrstuvwxyz1234567890#&!ぁあかがきたぞそぜほぱばヅオゑбгджзйфцчщыэюя';
-
-  return letterOptions[Math.floor(Math.random() * letterOptions.length)];
-}
-
+/** This method will setup the canvas and context based on the html canvas available in the page. */
 export const setupEffect = () => {
   canvas = document.getElementById('canvas-1');
-  ctx = canvas.getContext('2d', {
-    alpha: true,
-  });
+  ctx = canvas.getContext('2d');
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
   ctx.fillStyle = 'white';
 
-  effect = new Effect(canvas.width, canvas.height);
-  let startTime, previousTimeStamp;
-  effect.init();
-  effect.render(ctx, 0);
+  effect = new Effect(canvas.width, canvas.height, ctx);
+  effect.render(ctx);
 
-  function animate(timestamp) {
-    if (!startTime) startTime = timestamp;
-    const elapsed = timestamp - startTime;
-
-    if (previousTimeStamp !== timestamp) {
-      previousTimeStamp = timestamp;
-    }
-
-    // elapsed time is undefined on the first call
-    // elapsed time is converted to seconds.
-    if (!isNaN(elapsed)) {
-      effect.render(ctx, elapsed * 0.01);
-    }
+  function animate() {
+    effect.render(ctx);
 
     requestAnimationFrame(animate);
   }
@@ -51,155 +30,221 @@ export const setupEffect = () => {
   animate();
 };
 
+/** This effect will run whenever the screen gets resized */
 export const resizeEffect = () => {
   if (canvas) {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
   }
+  if (canvas && effect) {
+    effect.resize(canvas.width, canvas.height);
+  }
+
   canvasWidth = window.innerWidth;
   canvasHeight = window.innerHeight;
-
-  if (effect) {
-    effect.resize(canvasWidth, canvasHeight);
-  }
 };
 
 export const clearEffect = () => {
   // TODO: implement clear function
+  if (canvas && ctx) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
 };
 
+export const onZoomChange = (newZoom) => {
+  if (effect) {
+    effect.zoom = parseFloat(newZoom);
+    effect.init(ctx);
+  }
+};
+
+export const onCurveChange = (newCurve) => {
+  if (effect) {
+    effect.curve = parseFloat(newCurve);
+    effect.init(ctx);
+  }
+};
+
+export const onChangeColors = (newColors) => {
+  if (effect) {
+    effect.colors = newColors;
+    effect.init(ctx);
+  }
+};
+
+class Particle {
+  constructor(effect) {
+    this.effect = effect;
+    this.x = Math.floor(Math.random() * this.effect.width);
+    this.y = Math.floor(Math.random() * this.effect.height);
+    this.speedX;
+    this.speedY;
+
+    this.speedModifier = Math.floor(Math.random() * 5 + 1);
+    this.history = [{ x: this.x, y: this.y }];
+    this.maxLength = Math.floor(Math.random() * 200 + 10);
+    this.angle = 0;
+    this.timer = this.maxLength * 2;
+    this.color =
+      this.effect.colors[Math.floor(Math.random() * this.effect.colors.length)];
+  }
+
+  draw(context) {
+    withContext(context, () => {
+      context.beginPath();
+      context.strokeStyle = this.color;
+      context.moveTo(this.history[0].x, this.history[0].y);
+
+      for (let i = 0; i < this.history.length; i++) {
+        const { x, y } = this.history[i];
+        context.lineTo(x, y);
+      }
+
+      context.stroke();
+    });
+  }
+
+  update() {
+    this.timer--;
+    if (this.timer >= 1) {
+      let x = Math.floor(this.x / this.effect.cellSize);
+      let y = Math.floor(this.y / this.effect.cellSize);
+      let index = y * this.effect.cols + x;
+      this.angle = this.effect.flowField[index];
+
+      this.speedX = Math.cos(this.angle);
+      this.speedY = Math.sin(this.angle);
+      this.x += this.speedX * this.speedModifier;
+      this.y += this.speedY * this.speedModifier;
+
+      this.history.push({
+        x: this.x,
+        y: this.y,
+      });
+      if (this.history.length > this.maxLength) {
+        this.history.shift();
+      }
+    } else if (this.history.length > 1) {
+      this.history.shift();
+    } else {
+      this.reset();
+    }
+  }
+
+  reset() {
+    this.x = Math.floor(Math.random() * this.effect.width);
+    this.y = Math.floor(Math.random() * this.effect.height);
+    this.history = [
+      {
+        x: this.x,
+        y: this.y,
+      },
+    ];
+    this.timer = this.maxLength * 2;
+  }
+}
+
 class Effect {
-  constructor(width, height) {
+  constructor(width, height, ctx) {
     this.width = width;
     this.height = height;
     this.particles = [];
-    this.numberOfParticles = 1000;
+    this.numberOfParticles = 400;
+    this.cellSize = 20;
+    this.rows;
+    this.cols;
+    this.flowField = [];
+    this.curve = 3;
+    this.zoom = 0.12;
+    this.debug = false;
+    this.colors = [
+      '#fbbf24',
+      '#fcd34d',
+      '#fef08a',
+      '#84cc16',
+      '#10b981',
+      '#2dd4bf',
+    ];
+    this.init();
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'd' || e.key === 'D') {
+        this.debug = !this.debug;
+      }
+    });
   }
 
   resize(width, height) {
     this.width = width;
     this.height = height;
+    this.init();
   }
 
-  init() {
-    for (let i = 0; i < this.numberOfParticles; i++) {
-      this.particles.push(new Particle(this, i));
-    }
-  }
+  drawText(context) {
+    if (!this.debug) return;
 
-  render(context, elapsedTime) {
-    context.clearRect(0, 0, this.width, this.height);
-
-    this.particles.forEach((particle) => {
-      particle.update(elapsedTime);
-      particle.draw(context, elapsedTime);
+    withContext(context, () => {
+      context.font = '500px Impact';
+      context.textAlign = 'center';
+      context.textBaseline = 'middle';
+      context.fillText('JS', this.width * 0.5, this.height * 0.5);
     });
   }
-}
 
-class Particle {
-  constructor(effect, index) {
-    this.index = index;
-    this.effect = effect;
-    this.spacing = 20;
-    this.size = Math.floor(Math.random() * 20 + 8);
-    this.y = -Math.floor(Math.random() * this.spacing * 10);
-    this.x = this.pickColumn();
-    this.speedY = this.pickSpeed();
-    this.morphFrequency = this.pickMorphFrequency();
-    this.letter = 'A';
-    this.currentAge = 0;
-    this.maxAge = this.pickMaxAge();
-  }
+  init(context) {
+    /** Create flow field */
+    this.rows = Math.floor(this.height / this.cellSize);
+    this.cols = Math.floor(this.width / this.cellSize);
+    this.flowField = [];
 
-  update(elapsedTime) {
-    // make the particles rotate around the canvas
-    // use sin to make the particles move in a circle
-    this.y += this.speedY;
-    this.currentAge++;
-
-    if (this.currentAge > this.maxAge) {
-      this.y = -this.pickStartingPoint();
-      this.x = this.pickColumn();
-      this.speedY = this.pickSpeed();
-      this.morphFrequency = this.pickMorphFrequency();
-      this.currentAge = 0
-      this.maxAge = this.pickMaxAge();
+    for (let y = 0; y < this.rows; y++) {
+      for (let x = 0; x < this.cols; x++) {
+        let angle =
+          (Math.cos(x * this.zoom) + Math.sin(y * this.zoom)) * this.curve;
+        this.flowField.push(angle);
+      }
     }
 
-    // Time to change the letter on this particle
-    if (parseInt(elapsedTime) % this.morphFrequency === 0) {
-      this.letter = getRandomLetter();
-      this.morphFrequency = this.pickMorphFrequency();
-    }
-
-    // particle is off-screen, reset it
-    if (this.y > this.effect.height + this.spacing) {
-      this.y = -this.pickStartingPoint();
-      this.x = this.pickColumn();
-      this.speedY = this.pickSpeed();
-      this.morphFrequency = this.pickMorphFrequency();
-      this.size = Math.floor(Math.random() * 20 + 10);
-      this.maxAge = this.pickMaxAge();
+    /** Create effect particles */
+    this.particles = [];
+    for (let i = 0; i < this.numberOfParticles; i++) {
+      this.particles.push(new Particle(this));
     }
   }
 
-  pickStartingPoint() {
-    const startingPointChoices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-    return (
-      this.spacing *
-      startingPointChoices[
-        Math.floor(Math.random() * startingPointChoices.length)
-      ]
-    );
-  }
+  drawGrid(context) {
+    if (!this.debug) return;
 
-  pickMaxAge() {
-    return Math.floor(Math.random() * 300 + 100);
-  }
-
-  pickSpeed() {
-    const speedChoices = [1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3, 3.25, 3.5];
-    return speedChoices[Math.floor(Math.random() * speedChoices.length)];
-  }
-
-  pickColumn() {
-    const columns = this.effect.width / this.spacing;
-    const column = Math.floor(Math.random() * columns);
-    return column * this.spacing + this.size * 0.5;
-  }
-
-  pickMorphFrequency() {
-    const frequencyChoices = [10, 5, 8, 13, 15, 17, 20, 22, 25, 28, 31];
-    return frequencyChoices[
-      Math.floor(Math.random() * frequencyChoices.length)
-    ];
-  }
-
-  draw(context, elapsedTime) {
     withContext(context, () => {
-      // if ((parseInt(elapsedTime) % this.morphFrequency) - 1 === 0) {
-      //   context.fillStyle = 'rgba(255,255, 255, 0.5)'
-      //   context.clearRect(this.x, this.y, this.size, this.size)
-      //   return
-      // }
-      context.fillStyle = 'rgba(100,255,50,.1)';
+      context.strokeStyle = 'white';
+      context.lineWidth = 0.3;
 
-      if (this.maxAge - this.currentAge < 50) {
-        context.fillStyle = `rgba(100,255,50,${
-          (this.maxAge - this.currentAge) * 0.01
-        })`;
+      // Draw grid columns
+      for (let col = 0; col < this.cols; col++) {
+        context.beginPath();
+        context.moveTo(this.cellSize * col, 0);
+        context.lineTo(this.cellSize * col, this.height);
+        context.stroke();
       }
 
-      // context.fillRect(this.x, this.y, this.size, this.size);
-      context.font = `${this.size}px Arial`;
-      context.fillText(this.letter, this.x, this.y - this.size * 0.01);
-      context.fillText(this.letter, this.x, this.y - this.size * 0.03);
-      context.fillText(this.letter, this.x, this.y - this.size * 0.05);
-      context.fillText(this.letter, this.x, this.y);
+      // Draw grid rows
+      for (let row = 0; row < this.rows; row++) {
+        context.beginPath();
+        context.moveTo(0, this.cellSize * row);
+        context.lineTo(this.width, this.cellSize * row);
+        context.stroke();
+      }
+    });
+  }
 
-      // context.font = '10px Arial'
-      // context.fillText(this.index.toString(), this.x + this.spacing * .5, this.y + this.spacing * .5)
+  render(context) {
+    context.clearRect(0, 0, this.width, this.height);
+
+    this.drawText(context);
+    this.drawGrid(context);
+    this.particles.forEach((particle) => {
+      particle.draw(context);
+      particle.update();
     });
   }
 }

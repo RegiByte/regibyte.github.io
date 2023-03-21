@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import * as experimentalEffect from './experimental';
+import * as experimentalEffect from './experimental.js';
 import './experimental.css';
 import { useCanvasEffect } from '../../../hooks/useCanvasEffect';
 
