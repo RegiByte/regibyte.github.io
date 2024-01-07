@@ -1,9 +1,11 @@
 ---
+import "@/styles/base.css"
 import MainHead from "../components/seo/MainHead.astro"
 import DarkMode from "../components/ui/theme/darkModeScript.astro"
 import Background from "../components/ui/theme/background.astro"
 import { Footer } from "../components/ui/theme/footer.jsx"
 import { Header } from "../components/ui/theme/header.jsx"
+import { ViewTransitions } from 'astro:transitions';
 const { frontmatter } = Astro.props;
 // Compile time JS Here
 ---
@@ -14,9 +16,10 @@ const { frontmatter } = Astro.props;
     title={frontmatter?.title || "Reginaldo Junior | Dev"}
     description={frontmatter?.description || "This is RegiByte's Portfolio! Check it out. cool animations, canvas animations and stuff yaaaaay!!"}
   />
+  <ViewTransitions/>
 </head>
 <body class="flex h-full flex-col bg-zinc-50 dark:bg-black">
-<DarkMode is:inline />
+<DarkMode is:inline transition:persist/>
 <Background />
 
 <div class="relative">

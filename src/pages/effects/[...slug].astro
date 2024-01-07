@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Effect from '../../layouts/effect.astro';
-import { getActiveEffects } from '../../content/utils';
+import { getActiveEffects } from '../../utils/contentUtils';
 
 export async function getStaticPaths() {
   const effectsEntries = await getActiveEffects();

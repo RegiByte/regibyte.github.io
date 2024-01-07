@@ -1,0 +1,22 @@
+---
+import Layout from '../layouts/basic.astro';
+import { Container } from '../components/ui/theme/container.jsx';
+---
+
+<script>
+  import * as Effect from '@effect/io/Effect';
+  import {program} from "../effects/effects"
+
+  const main = Effect.runSync(program);
+  console.log(main);
+
+</script>
+
+<Layout>
+  <Container className='mt-9 text-base text-zinc-600 dark:text-zinc-400'>
+    <h1 class='text-2xl dark:text-zinc-300 text-zinc-600 py-2'>Test</h1>
+    <div class='mt-4 flex flex-col gap-4'>
+      Hi there
+    </div>
+  </Container>
+</Layout>

@@ -1,7 +1,8 @@
-import {useEffect} from "react";
-import {clearEffect, resizeEffect, setupEffect} from "../components/effects/flow-field/flow-field";
+import React, {useEffect} from "react";
 
-export function useCanvasEffect(setupEffect, clearEffect, resizeEffect) {
+type Callback = () => void;
+
+export function useCanvasEffect(setupEffect: Callback, clearEffect: Callback, resizeEffect: Callback): void {
   useEffect(() => {
     const resizeCallback = () => {
       resizeEffect()

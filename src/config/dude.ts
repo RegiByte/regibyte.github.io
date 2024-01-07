@@ -47,7 +47,7 @@ export interface Dude {
 
 export const dude: Dude = {
   avatar: {
-    mini: miniAvatar,
+    mini: miniAvatar.src,
   },
   nav: [
     // {
@@ -86,12 +86,12 @@ export const dude: Dude = {
     photos: [
       'https://via.placeholder.com/256',
       {
-        picture: flowFieldPhoto,
+        picture: flowFieldPhoto.src,
         url: '/effects/flow-field',
         title: 'Flow Field Effect',
       },
       {
-        picture: matrixPhoto,
+        picture: matrixPhoto.src,
         url: '/effects/matrix',
         title: 'Matrix Effect',
       },
@@ -102,7 +102,7 @@ export const dude: Dude = {
       {
         company: 'AE Studio',
         title: 'Senior Full-Stack Dev',
-        logo: aeStudioLogo,
+        logo: aeStudioLogo.src,
         start: '2022',
         end: {
           label: 'Present',
@@ -112,14 +112,14 @@ export const dude: Dude = {
       {
         company: 'Trimble Transportation',
         title: 'Senior Backend Dev',
-        logo: trimbleLogo,
+        logo: trimbleLogo.src,
         start: '2020',
         end: '2022',
       },
       {
         company: 'PDV 365',
         title: 'React Dev',
-        logo: pdv365Logo,
+        logo: pdv365Logo.src,
         start: '2019',
         end: '2020',
       },

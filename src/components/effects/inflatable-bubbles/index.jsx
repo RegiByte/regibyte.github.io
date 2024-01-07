@@ -1,6 +1,6 @@
-import React from "react";
-import * as flowField from "./flow-field";
-import "./flow-field.css"
+import React, {useEffect} from "react";
+import * as flowField from "./inflatable-bubbles";
+import "./inflatable-bubbles.css"
 import {useCanvasEffect} from "../../../hooks/useCanvasEffect";
 
 export default function FlowFieldEffect() {

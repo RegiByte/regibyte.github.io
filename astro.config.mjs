@@ -1,20 +1,22 @@
 import { defineConfig } from 'astro/config';
-import react from "@astrojs/react";
-import tailwind from "@astrojs/tailwind";
-import svelte from "@astrojs/svelte";
+import react from '@astrojs/react';
+import tailwind from '@astrojs/tailwind';
+import svelte from '@astrojs/svelte';
 import a11yEmoji from '@fec/remark-a11y-emoji';
 
-import mdx from "@astrojs/mdx";
-import {remarkReadingTime} from "./plugins/markdown/readingTime.mjs";
+import mdx from '@astrojs/mdx';
+import { remarkReadingTime } from './plugins/markdown/readingTime.mjs';
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [react(), tailwind(), svelte(), mdx({
+  integrations: [react(), tailwind({
+    applyBaseStyles: false,
+  }), svelte(), mdx({
     rehypePlugins: [
       a11yEmoji,
     ],
     remarkPlugins: [
-      remarkReadingTime
+      remarkReadingTime,
     ],
   })],
   markdown: {
@@ -22,7 +24,7 @@ export default defineConfig({
       a11yEmoji,
     ],
     remarkPlugins: [
-      remarkReadingTime
+      remarkReadingTime,
     ],
     shikiConfig: {
       // Choose from Shiki's built-in themes (or add your own)
@@ -35,7 +37,7 @@ export default defineConfig({
       // Enable word wrap to prevent horizontal scrolling
       wrap: true,
     },
-    extendDefaultPlugins: true
+    extendDefaultPlugins: true,
   },
   site: 'https://regibyte.github.io',
 });

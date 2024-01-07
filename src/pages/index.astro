@@ -8,7 +8,7 @@ import { Container } from '../components/ui/theme/container.jsx';
 import { InstagramIcon, GitHubIcon, LinkedInIcon } from '../components/ui/socialIcons.jsx';
 import { dude } from '../config/dude.ts';
 import { getCollection } from 'astro:content';
-import { getActiveEffects } from '../content/utils';
+import { getActiveEffects } from '../utils/contentUtils';
 
 // Compile time JS Here
 const mdArticles = await Astro.glob('./articles/*.md');

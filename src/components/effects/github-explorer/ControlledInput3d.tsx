@@ -1,4 +1,4 @@
-import React, { HTMLAttributes, useEffect, useRef, useState } from 'react';
+import React, { type HTMLAttributes, useEffect, useRef, useState } from 'react';
 
 export interface ControlledInput3DProps
   extends Omit<HTMLAttributes<HTMLInputElement>, 'onChange'> {
