@@ -27,7 +27,7 @@ const {tags = [], title, canvasCount = 1} = Astro.props
 <body class="flex h-full flex-col bg-zinc-50 dark:bg-black w-full">
 <DarkMode is:inline />
 
-<Header client:load currentRoute={Astro.url.pathname}/>
+<Header client:only='react' currentRoute={Astro.url.pathname}/>
 <main>
     <slot/>
 </main>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { ControlledInput3D } from '../github-explorer/ControlledInput3d.tsx';
 import { getInitialColors, getInitialText } from './helpers.ts';
 import { ShareIcon } from '@heroicons/react/24/solid';
@@ -11,6 +11,7 @@ import {
 import { Toaster } from '@components/cn/ui/toaster.tsx';
 import { useToast } from '@components/cn/ui/use-toast.ts';
 import { ColorPicker } from '@components/effects/color-picker';
+import { isServerSide } from '@/utils/browser.ts';
 
 export const TextEffectControl = ({
   onChange,
@@ -42,12 +43,28 @@ export const TextEffectControl = ({
     url.searchParams.set('text', encodeURIComponent(value));
     url.searchParams.set('colors', encodeURIComponent(colors.join(',')));
     navigator.clipboard.writeText(url.href);
-    const {dismiss} = toast({
+    const { dismiss } = toast({
       title: 'Link copiado para a área de transferência',
       description: 'Compartilhe o link para este efeito com seus amigos!',
     });
-    setTimeout(dismiss, 4000)
+    setTimeout(dismiss, 4000);
   };
+
+  const hideControls = useMemo(() => {
+    if (isServerSide()) return false;
+
+    const urlParams = new URL(window.location.href);
+
+    if (!urlParams.searchParams.get('controls')) {
+      return false;
+    }
+
+    return urlParams.searchParams.get('controls') === 'false';
+  }, []);
+
+  if (hideControls) {
+    return null;
+  }
 
   return (
     <>
