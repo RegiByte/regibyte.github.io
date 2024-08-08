@@ -15,6 +15,6 @@
         "./src/*"
       ]
     },
-    "jsx": "react"
+    "jsx": "preserve"
   }
 }

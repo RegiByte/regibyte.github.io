@@ -3,29 +3,22 @@ import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
 import svelte from '@astrojs/svelte';
 import a11yEmoji from '@fec/remark-a11y-emoji';
-
 import mdx from '@astrojs/mdx';
 import { remarkReadingTime } from './plugins/markdown/readingTime.mjs';
+
+import vue from "@astrojs/vue";
 
 // https://astro.build/config
 export default defineConfig({
   integrations: [react(), tailwind({
-    applyBaseStyles: false,
+    applyBaseStyles: false
   }), svelte(), mdx({
-    rehypePlugins: [
-      a11yEmoji,
-    ],
-    remarkPlugins: [
-      remarkReadingTime,
-    ],
-  })],
+    rehypePlugins: [a11yEmoji],
+    remarkPlugins: [remarkReadingTime]
+  }), vue()],
   markdown: {
-    rehypePlugins: [
-      a11yEmoji,
-    ],
-    remarkPlugins: [
-      remarkReadingTime,
-    ],
+    rehypePlugins: [a11yEmoji],
+    remarkPlugins: [remarkReadingTime],
     shikiConfig: {
       // Choose from Shiki's built-in themes (or add your own)
       // https://github.com/shikijs/shiki/blob/main/docs/themes.md
@@ -35,9 +28,9 @@ export default defineConfig({
       // https://github.com/shikijs/shiki/blob/main/docs/languages.md
       langs: [],
       // Enable word wrap to prevent horizontal scrolling
-      wrap: true,
+      wrap: true
     },
-    extendDefaultPlugins: true,
+    extendDefaultPlugins: true
   },
-  site: 'https://regibyte.github.io',
+  site: 'https://regibyte.github.io'
 });

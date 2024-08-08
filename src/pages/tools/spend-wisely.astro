@@ -1,0 +1,11 @@
+---
+import Layout from '../../layouts/basic.astro';
+import SpendWiselyTool from '@components/tools/spendWiselyTool/base.vue';
+import { Container } from '@components/ui/theme/container.jsx'
+---
+
+<Layout>
+  <Container className='mt-9'>
+    <SpendWiselyTool client:load />
+  </Container>
+</Layout>
