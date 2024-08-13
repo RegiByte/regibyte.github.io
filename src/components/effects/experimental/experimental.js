@@ -59,12 +59,14 @@ export const clearEffect = () => {
 };
 
 class Effect {
+  speed = 3
+
   constructor(width, height) {
     this.width = width;
     this.height = height;
-    this.snake = new Snake();
+    this.speed = 3;
+    this.snake = new Snake(this);
     this.apple = new Apple();
-    this.speed = 5
   }
 
   init() {
@@ -113,17 +115,21 @@ class Effect {
 }
 
 class Snake {
-  constructor() {
+  constructor(effect) {
     this.body = [
       { x: 10, y: 10 },
       { x: 20, y: 10 },
       { x: 30, y: 10 },
     ];
-    this.direction = { x: 5, y: 0 };
+    this.effect = effect;
+    this.direction = { x: this.effect.speed, y: 0 };
   }
 
   move() {
-    const head = { x: this.body[0].x + this.direction.x, y: this.body[0].y + this.direction.y };
+    const head = {
+      x: this.body[0].x + this.direction.x,
+      y: this.body[0].y + this.direction.y,
+    };
     this.body.unshift(head);
     this.body.pop();
   }
@@ -146,7 +152,7 @@ class Snake {
 
 class Apple {
   constructor() {
-    this.position = { x: 50,y: 50 };
+    this.position = { x: 50, y: 50 };
   }
 
   relocate() {

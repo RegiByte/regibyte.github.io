@@ -1,0 +1,33 @@
+.deck {
+    position: absolute;
+    width: 200px;
+    height: 300px;
+    will-change: transform;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: none;
+}
+
+.deck > div {
+    background-color: white;
+    background-size: auto 100%;
+    background-repeat: no-repeat;
+    background-position: center center;
+    width: 45vh;
+    max-width: 190px;
+    height: 85vh;
+    max-height: 280px;
+    will-change: transform;
+    border-radius: 9px;
+    padding: 0;
+    border: 1px solid rgba(0,0,0,.5);
+
+    &:first-child {
+        box-shadow: 0 6px 20px -10px rgba(50, 50, 73, 0.1), 0 10px 10px -10px rgba(50, 50, 73, 0.3);
+    }
+
+    &:nth-child(2) {
+        box-shadow: 0 6px 20px -10px rgba(50, 50, 73, 0.1), 0 10px 10px -10px rgba(50, 50, 73, 0.3);
+    }
+}

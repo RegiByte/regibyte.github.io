@@ -70,6 +70,10 @@ export const dude: Dude = {
       label: 'Effects',
       path: '/effects',
     },
+    {
+      label: 'Animations',
+      path: '/animations',
+    }
   ],
   social: {
     instagram: 'https://www.instagram.com/regibytes/',

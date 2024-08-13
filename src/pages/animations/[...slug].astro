@@ -1,0 +1,24 @@
+---
+import { getActiveAnimations } from '../../utils/contentUtils';
+import AnimationScene from '../../layouts/animationScene.astro';
+
+export async function getStaticPaths() {
+  const animations = await getActiveAnimations();
+
+  return animations.map(entry => ({
+    params: {
+      slug: entry.slug,
+    },
+    props: {
+      entry,
+    },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+---
+
+<AnimationScene tags={entry.data.tags} title={entry.data.title}>
+  <Content />
+</AnimationScene>

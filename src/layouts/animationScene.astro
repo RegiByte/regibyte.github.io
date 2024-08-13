@@ -1,0 +1,40 @@
+---
+import '@/styles/base.css'
+import Background from "../components/ui/theme/background.astro";
+import DarkMode from "../components/ui/theme/darkModeScript.astro"
+import { Header } from "../components/ui/theme/header.jsx"
+
+interface Props {
+    tags?: string[]
+    title: string
+}
+
+const {tags = [], title, canvasCount = 1} = Astro.props
+---
+
+<!doctype html>
+<html lang="en" class="w-full h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{title}</title>
+    {!!tags.length && (
+        <meta name="keywords" content={tags.join(', ')}/>
+    )}
+</head>
+<body class="flex h-full flex-col bg-zinc-50 dark:bg-black w-full">
+<DarkMode is:inline />
+
+<Header client:only='react' currentRoute={Astro.url.pathname}/>
+<main>
+    <slot/>
+</main>
+<div class="canvas-group">
+    {Array.from({length: canvasCount}).map((_, index) => (
+            <canvas class="canvas" id={`canvas-${index+1}`}/>
+    ))}
+</div>
+</body>
+</html>

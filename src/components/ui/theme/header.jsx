@@ -1,9 +1,10 @@
 import { Popover, Transition } from '@headlessui/react';
 import clsx from 'clsx';
 import { Container } from './container';
-import { Fragment, useEffect, useMemo, useRef } from 'react';
+import { Fragment, useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import { dude } from '../../../config/dude';
 import { isClientSide } from '@/utils/browser';
+import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect';
 
 function CloseIcon(props) {
   return (
@@ -145,7 +146,7 @@ function NavItem({ href, children, currentRoute, exact = false }) {
         )}>
         {children}
         {isActive && (
-          <span className="absolute inset-x-1 [height:2px] -bottom-px h-px bg-gradient-to-r from-teal-500/0 via-teal-500/40 to-teal-500/0 dark:from-teal-400/0 dark:via-teal-400/40 dark:to-teal-400/0" />
+          <span className="absolute inset-x-1 -bottom-px h-px bg-gradient-to-r from-teal-500/0 via-teal-500/40 to-teal-500/0 [height:2px] dark:from-teal-400/0 dark:via-teal-400/40 dark:to-teal-400/0" />
         )}
       </a>
     </li>
@@ -180,16 +181,18 @@ function ModeToggle() {
   function toggleMode() {
     disableTransitionsTemporarily();
 
-    let darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    let isSystemDarkMode = darkModeMediaQuery.matches;
     let isDarkMode = document.documentElement.classList.toggle('dark');
 
-    if (isDarkMode === isSystemDarkMode) {
-      delete window.localStorage.isDarkMode;
-    } else {
-      window.localStorage.isDarkMode = isDarkMode;
-    }
+    window.localStorage.isDarkMode = !!isDarkMode;
   }
+
+  useIsomorphicLayoutEffect(() => {
+    if (window.localStorage.isDarkMode === 'true') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, []);
 
   return (
     <button
@@ -358,7 +361,7 @@ export function Header({ currentRoute }) {
   return (
     <>
       <header
-        className={`pointer-events-none relative z-50 ${showHeader ? 'flex' : 'hidden'} flex-col main-header`}
+        className={`pointer-events-none relative z-50 ${showHeader ? 'flex' : 'hidden'} main-header flex-col`}
         style={{
           height: 'var(--header-height)',
           marginBottom: 'var(--header-mb)',

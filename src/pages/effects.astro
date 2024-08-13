@@ -1,9 +1,7 @@
 ---
 import Layout from '../layouts/basic.astro';
-import { Container } from '../components/ui/theme/container.jsx';
 import EffectCard from '../components/ui/effectCard.jsx';
 import SimpleLayout from '../components/ui/simpleLayout.jsx';
-import { getCollection } from 'astro:content';
 import { getActiveEffects } from '../utils/contentUtils';
 
 const effects = await getActiveEffects();

@@ -1,0 +1,29 @@
+---
+import Layout from '../layouts/basic.astro';
+import { getActiveAnimations } from '../utils/contentUtils';
+import SimpleLayout from '../components/ui/simpleLayout.jsx';
+import EffectCard from '../components/ui/effectCard.jsx';
+
+const threeDScenes = await getActiveAnimations();
+---
+
+<Layout>
+  <SimpleLayout
+    title='Experiments with animations'
+    intro={`A collection of 3D scenes and animations created by hand.`}
+  >
+    <div class='md:border-l md:border-zinc-100 md:pl-6 md:dark:border-zinc-700/40'>
+      <div class='flex max-w-3xl flex-col space-y-16'>
+        {threeDScenes.map(scene => (
+          <EffectCard
+            key={scene.slug}
+            date={scene.data.date}
+            url={`/animations/${scene.slug}`}
+            title={scene.data.title}
+            description={scene.data.description}
+          />
+        ))}
+      </div>
+    </div>
+  </SimpleLayout>
+</Layout>
