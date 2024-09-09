@@ -150,14 +150,14 @@ export const DeckOfCards = () => {
   }, {});
 
   return (
-    <div className="absolute top-0 left-0 flex h-full w-full items-center justify-center">
+    <div className="absolute top-0 left-0 flex h-screen overflow-hidden w-full items-center justify-center">
       <div className="relative flex h-full w-full flex-col items-center justify-center bg-sky-300 dark:bg-gray-900">
-        <h1
+        {/*<h1
           className={
             'absolute top-32 text-2xl font-bold text-slate-800 dark:text-slate-300'
           }>
           Animated Deck of Cards
-        </h1>
+        </h1>*/}
         {springs.map(({ x, y, rot, scale }, i) => {
           const cardImage = cardImages[i];
           return (
